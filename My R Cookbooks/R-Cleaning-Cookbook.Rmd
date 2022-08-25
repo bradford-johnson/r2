@@ -1,0 +1,51 @@
+---
+title: "Personal R Cleaning Cookbook"
+output: html_notebook
+---
+
+## dplyr Package
+> [Documentation](https://dplyr.tidyverse.org/)
+
+```{r dplyr}
+# install.packages("dplyr") # install janitor package (remove '#' in front of install.packages("") to install)
+
+library(dplyr) # load dplyr package
+```
+
+> ### `%>%` <- pipe 
+![](pipe.png)
+
+>Using the pipe operator `%>%` is fun and easy!<br>
+<br>
+
+
+```{r}
+# without piping
+data <- read_csv("example.csv")
+data <- clean_names(data, ...)
+
+# with piping
+data <- read_csv("example.csv") %>%
+  clean_names()
+```
+
+<br>
+<br>
+
+## Janitor Package
+> [Documentation](https://www.rdocumentation.org/packages/janitor/versions/2.1.0)
+
+```{r janitor}
+# install.packages("janitor") # install janitor package (remove # in front of install.packages("") to install)
+
+library(janitor) # load janitor package
+```
+
+> ### `clean_names()` -> returns the data frame with clean names
+> This example shows the `clean_names()` function being used while reading in a '.csv' as a data frame
+
+```{r}
+data_frame <- read_csv("example.csv") %>%
+  clean_names() 
+```
+
