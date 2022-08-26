@@ -1,0 +1,249 @@
+---
+title: 'RFID Tag Data Analysis: 3/10/2022 to 8/4/2022'
+output:
+  html_notebook: default
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r packages}
+library(tidyverse) # tidyverse meta package
+library(ggridges) # for ggplot ridge plots
+library(ggthemes) # for more ggplot themes
+```
+
+```{r data import}
+tg_df <- read_csv("tg-data-export.csv") # import tg-data-export (data covers 3/10/2022 to 8/4/2022)
+```
+
+```{r EDA tags_read}
+tg_df$weekday <- factor(tg_df$weekday, levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+
+tg_df %>%
+  ggplot(aes(y = total_balls_dispensed)) +
+  geom_boxplot() +
+  labs(title = "Total RFID Tags Read") +
+  facet_wrap(~weekday, nrow = 1) +
+  scale_y_continuous(limits=c(0,100000)) +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(), axis.title.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.major.x = element_blank()) 
+  
+```
+
+```{r data cleaning: total_tags_read}
+# create a df group for each day of week
+monday_df <- tg_df %>%
+  filter(weekday == "Monday")
+
+tuesday_df <- tg_df %>%
+  filter(weekday == "Tuesday")
+
+wednesday_df <- tg_df %>%
+  filter(weekday == "Wednesday")
+
+thursday_df <- tg_df %>%
+  filter(weekday == "Thursday")
+
+friday_df <- tg_df %>%
+  filter(weekday == "Friday")
+
+saturday_df <- tg_df %>%
+  filter(weekday == "Saturday")
+
+sunday_df <- tg_df %>%
+  filter(weekday == "Sunday")
+```
+
+```{r outlier removal: total_tags_read}
+# remove outliers monday
+Q_monday <- quantile(monday_df$total_balls_dispensed, probs=c(.25, .75), na.rm = FALSE)
+iqr_monday <- IQR(monday_df$total_balls_dispensed)
+up_monday <-  Q_monday[2]+1.5*iqr_monday # Upper Range  
+low_monday <- Q_monday[1]-1.5*iqr_monday # Lower Range
+eliminated_monday <- subset(monday_df, monday_df$total_balls_dispensed > (Q_monday[1] - 1.5*iqr_monday) & monday_df$total_balls_dispensed < (Q_monday[2]+1.5*iqr_monday))
+
+# remove outliers tuesday
+Q_tuesday <- quantile(tuesday_df$total_balls_dispensed, probs=c(.25, .75), na.rm = FALSE)
+iqr_tuesday <- IQR(tuesday_df$total_balls_dispensed)
+up_tuesday <-  Q_tuesday[2]+1.5*iqr_tuesday # Upper Range  
+low_tuesday <- Q_tuesday[1]-1.5*iqr_tuesday # Lower Range
+eliminated_tuesday <- subset(tuesday_df, tuesday_df$total_balls_dispensed > (Q_tuesday[1] - 1.5*iqr_tuesday) & tuesday_df$total_balls_dispensed < (Q_tuesday[2]+1.5*iqr_tuesday))
+
+# remove outliers wednesday
+Q_wednesday <- quantile(wednesday_df$total_balls_dispensed, probs=c(.25, .75), na.rm = FALSE)
+iqr_wednesday <- IQR(wednesday_df$total_balls_dispensed)
+up_wednesday <-  Q_wednesday[2]+1.5*iqr_wednesday # Upper Range  
+low_wednesday <- Q_wednesday[1]-1.5*iqr_wednesday # Lower Range
+eliminated_wednesday <- subset(wednesday_df, wednesday_df$total_balls_dispensed > (Q_wednesday[1] - 1.5*iqr_wednesday) & wednesday_df$total_balls_dispensed < (Q_wednesday[2]+1.5*iqr_wednesday))
+
+# remove outliers thursday
+Q_thursday <- quantile(thursday_df$total_balls_dispensed, probs=c(.25, .75), na.rm = FALSE)
+iqr_thursday <- IQR(thursday_df$total_balls_dispensed)
+up_thursday <-  Q_thursday[2]+1.5*iqr_thursday # Upper Range  
+low_thursday <- Q_thursday[1]-1.5*iqr_thursday # Lower Range
+eliminated_thursday <- subset(thursday_df, thursday_df$total_balls_dispensed > (Q_thursday[1] - 1.5*iqr_thursday) & thursday_df$total_balls_dispensed < (Q_thursday[2]+1.5*iqr_thursday))
+
+# remove outliers friday
+Q_friday <- quantile(friday_df$total_balls_dispensed, probs=c(.25, .75), na.rm = FALSE)
+iqr_friday <- IQR(friday_df$total_balls_dispensed)
+up_friday <-  Q_friday[2]+1.5*iqr_friday # Upper Range  
+low_friday <- Q_friday[1]-1.5*iqr_friday # Lower Range
+eliminated_friday <- subset(friday_df, friday_df$total_balls_dispensed > (Q_friday[1] - 1.5*iqr_friday) & friday_df$total_balls_dispensed < (Q_friday[2]+1.5*iqr_friday))
+
+# remove outliers saturday
+Q_saturday <- quantile(saturday_df$total_balls_dispensed, probs=c(.25, .75), na.rm = FALSE)
+iqr_saturday <- IQR(saturday_df$total_balls_dispensed)
+up_saturday <-  Q_saturday[2]+1.5*iqr_saturday # Upper Range  
+low_saturday <- Q_saturday[1]-1.5*iqr_saturday # Lower Range
+eliminated_saturday <- subset(saturday_df, saturday_df$total_balls_dispensed > (Q_saturday[1] - 1.5*iqr_saturday) & saturday_df$total_balls_dispensed < (Q_saturday[2]+1.5*iqr_saturday))
+
+# remove outliers sunday
+Q_sunday <- quantile(sunday_df$total_balls_dispensed, probs=c(.25, .75), na.rm = FALSE)
+iqr_sunday <- IQR(sunday_df$total_balls_dispensed)
+up_sunday <-  Q_sunday[2]+1.5*iqr_sunday # Upper Range  
+low_sunday <- Q_sunday[1]-1.5*iqr_sunday # Lower Range
+eliminated_sunday <- subset(sunday_df, sunday_df$total_balls_dispensed > (Q_sunday[1] - 1.5*iqr_sunday) & sunday_df$total_balls_dispensed < (Q_sunday[2]+1.5*iqr_sunday))
+
+# re-construct the now cleaned df's into one df
+tg_df_cleaned <- eliminated_monday %>%
+  bind_rows(eliminated_tuesday) %>%
+  bind_rows(eliminated_wednesday) %>%
+  bind_rows(eliminated_thursday) %>%
+  bind_rows(eliminated_friday) %>%
+  bind_rows(eliminated_saturday) %>%
+  bind_rows(eliminated_sunday)
+```
+
+```{r outliers removed plot}
+# boxplot to see outliers removed
+tg_df_cleaned %>%
+  ggplot(aes(y = total_balls_dispensed)) +
+  geom_boxplot() +
+  labs(title = "Total Tags Read") +
+  facet_wrap(~weekday, nrow = 1) +
+  scale_y_continuous(limits=c(0,100000)) +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(), axis.title.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.major.x = element_blank()) 
+```
+
+```{r tags_read plot}
+tg_df_cleaned$weekday <- factor(tg_df_cleaned$weekday, levels = c("Sunday","Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"))
+tg_df_cleaned %>%
+  ggplot(aes(x = total_balls_dispensed, y = weekday, fill = factor(stat(quantile)))) +
+  stat_density_ridges(rel_min_height = 0.01, geom = "density_ridges_gradient", calc_ecdf = TRUE, quantiles = 4, quantile_lines = TRUE, jittered_points = TRUE, position = position_points_jitter(width = 0.05, height = 0), point_shape = '|', point_size = 3, point_alpha = 1, alpha = 0.7) +
+  scale_fill_viridis_d(name = "Quartiles", alpha = .7) +
+  theme_ridges() +
+  theme(axis.title.y = element_blank()) + #axis.title.x = element_blank()) +
+  scale_x_continuous(breaks = c(0,20000,40000,60000,80000,100000)) + 
+  labs(title = "Distribution of RFID Tags Read per Day", subtitle = "3/10/2022 to 8/4/2022", x = "RFID Tags Read")
+```
+
+```{r data cleaning: Error Tag %}
+# remove percent sign for percent of practice balls 
+practice_ball_percent_df <- tg_df %>%
+  mutate(percent_practice = as.numeric(gsub("%", "", percent_practice)))
+
+# remove outliers 
+Q_practice_ball_percent <- quantile(practice_ball_percent_df$percent_practice, probs=c(.25, .75), na.rm = FALSE)
+
+iqr_practice_ball_percent <- IQR(practice_ball_percent_df$percent_practice)
+
+up_practice_ball_percent <-  Q_practice_ball_percent[2]+1.5*iqr_practice_ball_percent # Upper Range  
+low_practice_ball_percent <- Q_practice_ball_percent[1]-1.5*iqr_practice_ball_percent # Lower Range
+
+eliminated_practice_ball_percent <- subset(practice_ball_percent_df, practice_ball_percent_df$percent_practice > (Q_practice_ball_percent[1] - 1.5*iqr_practice_ball_percent) & practice_ball_percent_df$percent_practice < (Q_practice_ball_percent[2]+1.5*iqr_practice_ball_percent))
+
+# fix date 
+eliminated_practice_ball_percent$date <- as.Date(eliminated_practice_ball_percent$date, format="%m/%d/%Y")
+
+```
+
+```{r error_tag_percent plot}
+eliminated_practice_ball_percent %>%
+  ggplot(aes(x = date, y = percent_practice, group = 1)) +
+  geom_line() + 
+  geom_smooth(method = "lm", se = FALSE, colour = "red") +
+  theme_classic() +
+  labs(title = "Error Tag Percentage", subtitle = "3/10/2022 to 8/4/2022", y = "(%)") +
+  theme(axis.title.y = element_text(angle = 180, vjust = .5), axis.title.x = element_blank())
+```
+
+```{r error_tag_percent summary}
+practice_ball_summary <- eliminated_practice_ball_percent %>%
+  group_by(weekday) %>%
+  summarise("avg_practice_ball_%" = mean(percent_practice))
+
+practice_ball_summary %>% 
+  ggplot(aes(x = weekday, y = `avg_practice_ball_%`)) +
+  geom_col() +
+  theme_classic() +
+  labs(title = "Average Error Tag Percentage by Day", subtitle = "3/10/2022 to 8/4/2022", x = "", y = "(%)") +
+  theme(axis.title.y = element_text(angle = 180, vjust = .5))
+```
+
+```{r error_tag_percent summary 2}
+# practice ball percent add speedway column
+practice_ball_speedway <- eliminated_practice_ball_percent %>%
+  mutate(speedway_update = case_when( date < "2022-06-10" ~ "PRE-Update",
+                                      date >= "2022-06-10" ~ "POST-Update"
+                                     ))
+
+practice_ball_summary_comp <- practice_ball_speedway %>%
+  group_by(weekday, speedway_update) %>%
+  summarise("avg_practice_ball_%" = mean(percent_practice))
+# re-order speedway update for logical flow 
+practice_ball_summary_comp$speedway_update <- factor(practice_ball_summary_comp$speedway_update, levels = c("PRE-Update", "POST-Update"))
+
+practice_ball_summary_comp %>% 
+  ggplot(aes(x = weekday, y = `avg_practice_ball_%`, fill = speedway_update)) +
+  geom_col() +
+  theme_classic() +
+  labs(title = "Average Error Tag Percentage by Day: Software Update", subtitle = "3/10/2022 to 8/4/2022, Update occurred ~ 6/10/2022", x = "", y = "(%)") +
+  theme(axis.title.y = element_text(angle = 180, vjust = .5), axis.text.x = element_text(angle = 90), legend.position = "none") + 
+  facet_wrap(~speedway_update)
+```
+
+
+```{r data cleaning: tag edit %}
+# remove percent sign for ball edit percent
+ball_edit_percent_df <- tg_df %>%
+  mutate(percent_edit = as.numeric(gsub("%", "", percent_edit)))
+
+# remove outliers 
+Q_ball_edit_percent <- quantile(ball_edit_percent_df$percent_edit, probs=c(.25, .75), na.rm = FALSE)
+
+iqr_ball_edit_percent <- IQR(ball_edit_percent_df$percent_edit)
+
+up_ball_edit_percent <-  Q_ball_edit_percent[2]+1.5*iqr_ball_edit_percent # Upper Range  
+low_ball_edit_percent <- Q_ball_edit_percent[1]-1.5*iqr_ball_edit_percent # Lower Range
+
+eliminated_ball_edit_percent <- subset(ball_edit_percent_df, ball_edit_percent_df$percent_edit > (Q_ball_edit_percent[1] - 1.5*iqr_ball_edit_percent) & ball_edit_percent_df$percent_edit < (Q_ball_edit_percent[2]+1.5*iqr_ball_edit_percent))
+
+# fix date 
+eliminated_ball_edit_percent$date <- as.Date(eliminated_ball_edit_percent$date, format="%m/%d/%Y")
+```
+
+```{r tag_edit_percent plot}
+eliminated_ball_edit_percent %>%
+  ggplot(aes(x = date, y = percent_edit, group = 1)) +
+  geom_line() + 
+  geom_smooth(method = "lm", se = FALSE, colour = "red") +
+  theme_classic() +
+  labs(title = "Tag Edit Percentage", subtitle = "3/10/2022 to 8/4/2022", y = "(%)") +
+  theme(axis.title.y = element_text(angle = 180, vjust = .5), axis.title.x = element_blank())
+```
+
+```{r tag_edit_percent summary}
+ball_edit_summary <- eliminated_ball_edit_percent %>%
+  group_by(weekday) %>%
+  summarise("avg_ball_edit_%" = mean(percent_edit))
+
+ball_edit_summary %>% 
+  ggplot(aes(x = weekday, y = `avg_ball_edit_%`)) +
+  geom_col() +
+  theme_classic() +
+  labs(title = "Average Tag Edit Percentage by Day", subtitle = "3/10/2022 to 8/4/2022", x = "", y = "(%)") +
+  theme(axis.title.y = element_text(angle = 180, vjust = .5))
+```
+
