@@ -1,0 +1,91 @@
+---
+title: "RFID Tag Error Distribution"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r}
+# load in libraries
+library(tidyverse)
+library(viridis)
+library(plyr)
+
+# load in data
+tg_df <- read_csv("tg-update-df.csv")
+ttg_df <-read_csv("update_t-test.csv")
+
+mu <- ddply(ttg_df, "update", summarise, grp.mean=mean(percent))
+```
+
+```{r}
+# plot 1
+ttg_df %>%
+  ggplot( aes(x=percent, y = ..scaled.., fill=update)) +
+    geom_density( color="#e9ecef", alpha=0.6) +
+    scale_fill_manual(values=c("#69b3a2", "#404080")) +
+    scale_color_manual(values=c("#46897a", "#27274d")) +
+    labs(fill="", x = "Error (%)", y = "") +
+    geom_vline(data=mu, aes(xintercept=grp.mean, color=update),
+              linetype="dashed") +
+    theme(legend.title = element_blank(), legend.position = c(.9,.78), axis.line = element_line(), panel.grid = element_blank(), )
+```
+
+```{r}
+# clean up and remove outliers 
+Q <- quantile(ttg_df$percent, probs=c(.25, .75), na.rm = FALSE)
+iqr <- IQR(ttg_df$percent)
+
+up <-  Q[2]+1.5*iqr # Upper Range  
+low<- Q[1]-1.5*iqr # Lower Range﻿
+
+eliminated<- subset(ttg_df, ttg_df$percent > (Q[1] - 1.5*iqr) & ttg_df$percent < (Q[2]+1.5*iqr))
+
+# plot 2
+eliminated %>%
+  ggplot( aes(x=percent, y = ..scaled.., fill=update)) +
+    geom_density( color="#000000", alpha=0.6) +
+    scale_fill_manual(values=c( "#404080","#69b3a2")) +
+    scale_color_manual(values=c("#27274d","#46897a")) +
+    expand_limits(x=0, y=0) +
+    labs(color="Mean", fill="Group", y="", x="Error (%)", title = "RFID Tag Error Distribution", subtitle = "") +
+    geom_vline(data=mu, aes(xintercept=grp.mean, color=update),
+              linetype="dashed") +
+    theme(legend.position = c(.9,.7), axis.line = element_line(), panel.grid = element_blank()) +
+  theme_classic()
+```
+
+```{r}
+# plot 3
+eliminated %>%
+  ggplot( aes(x=percent, y = ..scaled.., fill=update)) +
+    geom_density( color="#e9ecef", alpha=0.6) +
+    scale_fill_manual(values=c( "#404080","#69b3a2")) +
+    scale_color_manual(values=c("#27274d","#46897a")) +
+    expand_limits(x=0, y=0) +
+    labs(color="Mean", fill="Group", y="", x="Error (%)", title = "RFID Tag Error Distribution", subtitle = "") +
+    geom_vline(data=mu, aes(xintercept=grp.mean, color=update),
+              linetype="dashed") +
+    theme(legend.position = c(.9,.7), axis.line = element_line(), panel.grid = element_blank()) +
+  theme_classic()
+```
+
+
+```{r}
+# t.test for signif of percent error ~ update groups
+eliminated %>% 
+  t.test(percent~update, data = .)
+
+```
+
+```{r}
+# this is just for making a cool looking shape
+ggplot(eliminated, aes(x=x)) +
+  # Top
+  geom_density( aes(x = 'post-update', y = ..scaled..), fill="#69b3a2" ) +
+  # Bottom
+  geom_density( aes(x = 'pre-update', y = -..scaled..), fill= "#404080") +
+  xlab("")
+```
+
+
