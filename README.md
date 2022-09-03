@@ -40,3 +40,10 @@
 <br>  
 
 ---
+
+### **January 2022**
+#### Exploring aesthetics and created my kaggle account
+![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/cocoa-content.png)
+<br>  
+
+---
