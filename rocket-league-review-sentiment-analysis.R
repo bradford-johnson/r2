@@ -131,3 +131,38 @@ db_bing %>%
   ggplot(aes(x = user, y = sentiment, fill = sentiment)) +
   geom_col(position = "stack") 
 
+
+library(widyr) # for pairwise correlation 
+library(igraph) # for data visualization
+library(ggraph) # for data visualization
+
+review_words <- df_com %>% 
+  unnest_tokens(output = word, input = review) %>% 
+  anti_join(stop_words, by = "word") %>% 
+  filter(str_detect(word, "[:alpha:]")) %>% 
+  distinct()
+
+
+reviews_that_mention_word <- review_words %>% 
+  count(word, name = "number_of_reviews") %>% 
+  filter(number_of_reviews >= 7)
+
+
+review_correlations <- review_words %>% 
+  semi_join(reviews_that_mention_word, by = "word") %>% 
+  pairwise_cor(item = word, feature = user) %>% 
+  filter(correlation >= 0.01) 
+
+
+graph_from_data_frame(d = review_correlations,
+                      vertices = reviews_that_mention_word %>%
+                        semi_join(review_correlations, by = c("word" = "item1"))) %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(alpha = correlation)) + 
+  geom_node_point() +
+  geom_node_text(aes(color = number_of_reviews, label = name), repel = TRUE, check_overlap = TRUE, size = 4) + 
+  labs(title = "Rocket League Reviews") +
+  scale_colour_gradientn(colours=c("#3e3b92", "#f44369")) +
+  theme(panel.background = element_rect(fill = "#eaeaea"),
+        plot.background = element_rect(fill = "#ffffff"))
+
