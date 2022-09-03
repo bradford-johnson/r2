@@ -64,21 +64,19 @@
 #### Software update effectiveness analysis 
 ![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/tg-update-density-1.png)
 <br>  
-
-#### Updated software update effectiveness analysis
-![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/tg-update-density-2.png)
-<br>  
-
 ---
 
 ### **July 2022**
-#### Data cleaning and more density plots :)
-![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/rfid-tag-reads.png)
-<br>  
+#### Updated software update effectiveness analysis
+![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/tg-update-density-2.png)
+<br> 
 
 ---
 
 ### **August 2022**
+#### Data cleaning and more density plots :)
+![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/rfid-tag-reads.png)
+<br>  
 #### Small scale test for larger upcoming project on sentiment analysis and web scraping
 ![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/rocket_league_sentiment_analysis.png)
 <br>  
