@@ -43,7 +43,7 @@
 
 ### **January 2022**
 #### Exploring aesthetics and created my kaggle account
-![]<img src="https://github.com/bradfordjohnson/r/blob/main/plot-archive/cocoa-content.png" height="500">
+![]<img src="https://github.com/bradfordjohnson/r/blob/main/plot-archive/cocoa-content.png" height="400">
 <br>  
 
 ---
