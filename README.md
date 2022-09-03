@@ -64,7 +64,7 @@
 ![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/tg-update-density-1.png)
 <br>  
 
-#### Updates software update effectiveness analysis
+#### Updated software update effectiveness analysis
 ![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/tg-update-density-2.png)
 <br>  
 
