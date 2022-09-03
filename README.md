@@ -1,6 +1,6 @@
 # This repository is for my work in R
 
-> #### Check out my visual timeline below, these visuals where all made with R
+> #### Check out my visual R timeline below
 > #### See some of my progress over time, as I learn more about R and data analytics
 <br>  
 
