@@ -78,7 +78,7 @@
 ---
 
 ### **August 2022**
-#### Small sample test for larger upcoming project on sentiment analysis
+#### Small scale test for larger upcoming project on sentiment analysis and web scraping
 ![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/rocket_league_sentiment_analysis.png)
 <br>  
 
