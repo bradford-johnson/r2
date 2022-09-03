@@ -7,6 +7,14 @@
 
 ### This is the first plot I ever made for R, in early February 2021
 ![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/first-r-plot.png)  
+<br>  
 
 ---
-<br>
+
+### Early practicing with bar plots
+![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/nyc13-late-depart.png)
+<br>  
+
+---
+
+d
