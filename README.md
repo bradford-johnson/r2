@@ -28,14 +28,15 @@
 ---
 
 ### **August 2021**
-#### Early practicing with bar plots 
+#### Practicing with data cleaning and plot aesthetics
 ![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/nyc13-late-depart.png)
 <br>  
 
 ---
 
-###
-####
+### **December 2021**
+#### More aesthetics practice
+![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/shrimp-salmon-prices.png)
 <br>  
 
 ---
