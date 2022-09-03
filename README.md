@@ -43,7 +43,7 @@
 
 ### **January 2022**
 #### Exploring aesthetics and created my kaggle account
-![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/cocoa-content.png)
+![]<img src="https://github.com/bradfordjohnson/r/blob/main/plot-archive/cocoa-content.png" height="500">
 <br>  
 
 ---
@@ -53,5 +53,16 @@
 ![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/tg-first-static-density-dash.png)
 <br>  
 
+#### Updated static dashboard and worked on aesthetics
+![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/tg-static-dash2.png)
+<br>  
+
 ---
 
+### **June 2022**
+#### Software update effectiveness analysis 
+![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/tg-update-density-1.png)
+<br>  
+
+#### Updates software update effectiveness analysis
+![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/tg-update-density-2.png)
