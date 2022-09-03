@@ -66,3 +66,22 @@
 
 #### Updates software update effectiveness analysis
 ![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/tg-update-density-2.png)
+<br>  
+
+---
+
+### **July 2022**
+#### Data cleaning and more density plots :)
+![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/rfid-tag-reads.png)
+<br>  
+
+---
+
+### **August 2022**
+#### Small sample test for larger upcoming project on sentiment analysis
+![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/rocket_league_sentiment_analysis.png)
+<br>  
+
+![](
+https://github.com/bradfordjohnson/r/blob/main/plot-archive/rocket-league-review-word-correlations.png)
+<br>  
