@@ -47,3 +47,11 @@
 <br>  
 
 ---
+
+### **April 2022**
+#### Learning how to put plots together, and about density plots
+![](https://github.com/bradfordjohnson/r/blob/main/plot-archive/tg-first-static-density-dash.png)
+<br>  
+
+---
+
