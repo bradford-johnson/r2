@@ -3,5 +3,5 @@
 *.Rmd linguist-detectable=true
 
 *.qmd linguist-detectable=true
-*.qmd linguist-language=RMarkdown
+*.qmd linguist-language=QMarkdown
 *.qmd linguist-detectable=true
