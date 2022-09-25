@@ -1,3 +1,7 @@
 *.Rmd linguist-detectable=true
 *.Rmd linguist-language=RMarkdown
 *.Rmd linguist-detectable=true
+
+*.qmd linguist-detectable=true
+*.qmd linguist-language=RMarkdown
+*.qmd linguist-detectable=true
