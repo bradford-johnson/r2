@@ -1,0 +1,132 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(DBI)
+library(RPostgres)
+library(tidyverse)
+library(strainerr)
+
+# establish connection with postgres data base
+con <- dbConnect(RPostgres::Postgres(),dbname = 'weatherinszeged', 
+                 host = '142.93.121.174', 
+                 port = 5432, 
+                 user = 'dabc_student',
+                 password = '7*.8G9QH21')
+
+# make sql query
+res <- dbSendQuery(con, "
+              SELECT windbearing AS angle, COUNT(windbearing) AS frequency 
+              FROM weatherinszeged
+              GROUP BY windbearing
+              ORDER BY angle;
+                   ")
+# execute query
+df <- dbFetch(res)
+
+# clear query
+dbClearResult(res)
+
+# disconnect from data base
+dbDisconnect(con)
+```
+
+```{r}
+p <- df %>%
+  mutate(Frequency = as.numeric(frequency), angle = as.numeric(angle)) %>%
+  ggplot(aes(x = angle, y = Frequency,colour = Frequency)) +
+  coord_polar(theta = "x", start = -pi/45) +
+  geom_col(posotion="jitter",size = 1) +
+  scale_x_continuous(breaks = seq(0, 360, 45)) +
+  scale_colour_continuous(type = "gradient") +
+  theme_minimal() +
+  theme(legend.position = "right", legend.title = element_text(angle = 0, vjust = 1), axis.text.y = element_blank(), axis.text.x = element_text(face = "bold"))
+
+p <- titlr(p, "Wind Bearing", "Angle", "")
+
+p
+```
+```{r}
+# establish connection with postgres data base
+con <- dbConnect(RPostgres::Postgres(),dbname = 'weatherinszeged', 
+                 host = '142.93.121.174', 
+                 port = 5432, 
+                 user = 'dabc_student',
+                 password = '7*.8G9QH21')
+
+# make sql query
+res <- dbSendQuery(con, "
+              SELECT windspeed AS wind, windbearing as bear
+              FROM weatherinszeged
+              LIMIT 2000;
+                   ")
+# execute query
+df2 <- dbFetch(res)
+
+# clear query
+dbClearResult(res)
+
+# disconnect from data base
+dbDisconnect(con)
+```
+
+```{r}
+p2 <- df2 %>%
+  mutate(MPH=wind) %>%
+ggplot(aes(x = bear, y = MPH,colour = MPH)) +
+  coord_polar(theta = "x", start = -pi/45) +
+  geom_col(position = "jitter",size = 1) +
+  scale_x_continuous(breaks = seq(0, 360, 45)) +
+  scale_colour_continuous(type = "gradient") +
+  theme_minimal() +
+  theme(legend.position = "right", legend.title = element_text(angle = 0, vjust = 1), axis.text.y = element_blank(), axis.text.x = element_text(face = "bold"))
+  
+p2 <- titlr(p2,"Wind Bearing and Speed", "Angle", "")
+
+p2
+```
+
+```{r}
+# establish connection with postgres data base
+con <- dbConnect(RPostgres::Postgres(),dbname = 'weatherinszeged', 
+                 host = '142.93.121.174', 
+                 port = 5432, 
+                 user = 'dabc_student',
+                 password = '7*.8G9QH21')
+
+# make sql query
+res <- dbSendQuery(con, "
+              SELECT preciptype AS precip, COUNT(preciptype) AS count
+              FROM weatherinszeged
+              GROUP BY preciptype;
+                   ")
+# execute query
+df3 <- dbFetch(res)
+
+# clear query
+dbClearResult(res)
+
+# disconnect from data base
+dbDisconnect(con)
+```
+
+```{r}
+colors <-c("#364a7f", "#bbbed3")
+p3 <- df3 %>%
+  mutate(count = as.numeric(count), precip = case_when(
+    precip == "rain" ~ "Rain", 
+    precip == "snow" ~ "Snow")) %>%
+  filter(precip != "null") %>%
+  ggplot(aes(x=precip,y=count)) +
+  geom_col(fill = colors) +
+  theme_minimal() +
+  scale_fill_manual(values = colors) +
+  theme()
+
+p3 <- titlr(p3, "Observed Precipitation", "", "Count")
+
+p3
+```
+
