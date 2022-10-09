@@ -67,9 +67,11 @@ fifa_tb <- fifa_df %>%
 ```{r count-plot}
 colors_df <-c("#7E9CC7","#90BF8C","#90BF8C","#7E9CC7")
 labcolors_df <-c("#455770","#253725","#253725","#455770")
+
 fifa_tb_1 <- fifa_tb %>%
   filter(median_wages > 6000) %>%
   mutate(median_wages = accounting(median_wages))
+
 fifa_tb_1 %>%
   ggplot(aes(x = position, y = median_wages, label = median_wages)) +
   geom_col(fill = colors_df) + 
@@ -80,4 +82,14 @@ fifa_tb_1 %>%
   labs(title = "Positions with median wage > $5,000",
        x = "",
        y = "")
+```
+
+```{r left-foot-plot}
+fifa_df %>%
+  filter(preferred_foot == "Right" | preferred_foot == "Left") %>%
+  ggplot(aes(x = as.numeric(overall), y = wage)) +
+  geom_jitter() +
+  geom_smooth() +
+  scale_y_continuous(labels = function(x) format(x, scientific = FALSE)) +
+  facet_wrap(~preferred_foot, nrow = 2)
 ```
